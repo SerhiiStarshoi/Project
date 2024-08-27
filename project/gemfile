@@ -1,0 +1,11 @@
+source 'http://gemcutter.org'
+
+gem "rails", ">=2.3.2"
+
+group :development do
+
+  gem 'rspec'
+
+  gem 'http'
+
+end
