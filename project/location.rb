@@ -1,12 +1,12 @@
 class Location
   attr_reader :portal_id, :title, :latitude, :longitude, :type
 
-  def initialize(portal_id, title, latitude, longitude)
-    @portal_id = portal_id
-    @title = title
-    @type = "Standard"
-    @latitude = latitude
-    @longitude = longitude
+  def initialize(params)
+    @portal_id = params[:portal_id]
+    @title = params[:title]
+    @type = params[:type]
+    @latitude = params[:latitude]
+    @longitude = params[:longitude]
   end
 
   def json_attributes
@@ -28,3 +28,6 @@ class Location
                    .post(locations_url, json: json_attributes)
   end
 end
+
+
+#def location_call має бути в іншому класі location_creator
