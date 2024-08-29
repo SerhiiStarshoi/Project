@@ -2,9 +2,11 @@ require_relative 'location'
 
 include RSpec::Matchers
 
+EMAIL_AUTH = "api/v1/email-auth"
+
 def receive_token
 
-  url = "#{ENV["AUTH_LINK"]}api/v1/email-auth"
+  url = "#{ENV["AUTH_LINK"]}{EMAIL_AUTH}"
 
   response = HTTP.headers(accept: "application/json")
                  .post(url, json: { email: ENV["EMAIL"], password: ENV["PASSWORD"] })
@@ -35,18 +37,12 @@ location = location_creator.create(portal_id: 16288, title: "location_6520", lat
 # один публічний метод кріейт
 # перейменувати файл відповідно до класу
 # клас авторизації з методом receive_token який викликаю в кріейті
-# файл в якому я буду все це запускатись, типу create_location.rb (cucumber)
-# api/v1/email-auth s константу
+# ++++ файл в якому я буду все це запускатись, типу create_location.rb (cucumber)
+# ++++ api/v1/email-auth s константу
 # expect в другий запит теж
 # написати експект який буде перевіряти що на виході буде клас локейшен з такими полями (експрекс на кожне поле класу)
-
-
-
-#Gemfile bundler #semantic versioning
-#dependabot
-# & -> query params i json body почитати
-# дописати gem file і вказати що треба(буде лиш http) і запушати на гітхаб
-# розбити на методи і на клас #get_token
-# клас який буде створювати локейшен самий простий (оформити як окремий проект, решту видалити файлів)
-# клас локейшен який буде мати базові рекваєрд поля
-# клас який буде створювати (викликати апі і кріейт локейшена, передаєш дані і на виході інстанс класу локейшен)
+#
+# gitignore (всі файли які не треба) має лижати в корені і додати папку ідеа
+# git push IDE розібратись чого не пушає
+# видалити з гіта через консольку папку idea (??)
+# поставити sublime text
