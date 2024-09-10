@@ -75,13 +75,12 @@ class LocationManager
         id: params[:portal_id]
       },
       title: params[:title],
-      custom_title: params[:custom_title], #захаркоджених значень немає бути #UPDATED
+      custom_title: params[:custom_title],
       type: params[:type],
       address: {
-        latitude: params[:latitude], #47.144312
-        longitude: params[:longitude] #21.64162
+        latitude: params[:latitude],
+        longitude: params[:longitude]
       }
     }
   end
 end
-
