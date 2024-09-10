@@ -62,7 +62,7 @@ class LocationManager
     # https://location-management.az-dev.over-haul.com/api/v1/locations/5159006/deactivate
 
     puts "URL of location to be deleted: #{location_id}"
-    puts "Deactivate URL: #{DEACTIVATE_URL}"
+    puts "Deactivate URL: #{deactivate_url}"
 
     HTTP.headers(accept: "application/json", authorization: "Bearer #{token}")
         .put(deactivate_url)
