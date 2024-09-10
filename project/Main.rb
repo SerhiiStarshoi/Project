@@ -33,7 +33,9 @@ aggregate_failures do
   puts "End"
 end
 
-updated_location.delete(location.location_id)
+deleted_location = LocationManager.new(token)
+
+deleted_location.delete(location.location_id)
 
 
 
