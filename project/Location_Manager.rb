@@ -47,7 +47,8 @@ class LocationManager
         .post(LOCATION_URL, json: json_attributes(params))
   end
 
-  def location_call_update(params, location_id) #приймає обєкт локацію, тоді змінна не потрібна
+  def location_call_update(params, created_location) #приймає обєкт локацію, тоді змінна не потрібна
+    location_id = created_location.location_id
     update_url = "#{ENV['LM_LINK']}api/v1/locations/#{location_id}"
     # https://location-management.az-dev.over-haul.com/api/v1/locations/5797710
 
@@ -74,11 +75,11 @@ class LocationManager
         id: params[:portal_id]
       },
       title: params[:title],
-      custom_title: "UPDATED", #захаркоджених значень немає бути
+      custom_title: params[:custom_title], #захаркоджених значень немає бути #UPDATED
       type: params[:type],
       address: {
-        latitude: "47.144312",
-        longitude: "21.64162"
+        latitude: params[:latitude], #47.144312
+        longitude: params[:longitude] #21.64162
       }
     }
   end
