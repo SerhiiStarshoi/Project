@@ -25,4 +25,4 @@ end
 # $LOAD_PATH? чи можна зробити через рекваєр
 # у всіх методах має бути теж перевірка статусів ++++
 # https://www.atlassian.com/git/tutorials/merging-vs-rebasing
-#
+# updated
