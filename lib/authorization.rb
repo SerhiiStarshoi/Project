@@ -1,8 +1,9 @@
 require 'rspec'
 require 'http'
-include RSpec::Matchers
 
 class Authorization
+  include RSpec::Matchers
+
   EMAIL_AUTH = "api/v1/email-auth"
   def receive_token
 

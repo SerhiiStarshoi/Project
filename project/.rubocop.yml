@@ -1,3 +1,0 @@
-# .rubocop.yml
-Style/StringLiterals:
-  EnforcedStyle: double_quotes

@@ -1,18 +1,14 @@
-require "securerandom"
-
-require_relative "../lib/authorization"
-require_relative "../lib/base"
-
 module Tests
   class Base
+    include RSpec::Matchers
+
     def whole_test
       before_action
       test_action
-      #after_action(location) #лежати окремо, забрати в бейз
     end
 
     def before_action
-      @location_manager = LocationManager.new(receive_token)
+      @location_manager = Locations::LocationManager.new(receive_token)
     end
 
     def after_action(location)
