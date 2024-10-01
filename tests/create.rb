@@ -1,6 +1,3 @@
-require_relative 'base'
-include Locations
-
 module Tests
   class Create < Base
     def test_action

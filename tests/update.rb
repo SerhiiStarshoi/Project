@@ -1,6 +1,3 @@
-require_relative 'base'
-include Locations
-
 module Tests
   class Update < Base
     def test_action

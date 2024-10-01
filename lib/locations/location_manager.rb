@@ -1,5 +1,7 @@
 module Locations
   class LocationManager
+    include RSpec::Matchers
+
     attr_reader :token
 
     LOCATION_URL = "#{ENV['LM_LINK']}api/v1/locations"
@@ -34,18 +36,17 @@ module Locations
     end
 
     def get_location(location)
-      response = location_hook(location)
-      location = Location.new(JSON.parse(response.body))
+      response = location_call_get(location)
       expect(response.status).to eq(200)
-      location
-    end
-
-    def location_hook(location)
-      location_check_url = "https://location-management.az-dev.over-haul.com/api/v1/locations/#{location.id}"
-      http.get(location_check_url)
+      Location.new(JSON.parse(response.body))
     end
 
     private
+
+    def location_call_get(location)
+      location_check_url = "https://location-management.az-dev.over-haul.com/api/v1/locations/#{location.id}"
+      http.get(location_check_url)
+    end
 
     def location_call_create(params)
       call_create = http.post(LOCATION_URL, json: json_attributes(params))
