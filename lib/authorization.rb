@@ -1,5 +1,5 @@
-require 'rspec'
-require 'http'
+require "http"
+require "rspec"
 
 class Authorization
   include RSpec::Matchers
