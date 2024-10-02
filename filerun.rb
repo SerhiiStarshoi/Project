@@ -1,8 +1,8 @@
-require_relative "lib/authorization"
-require_relative "lib/locations"
 require_relative 'tests'
 
-case ENV['WHAT_TEST'] #create
+what_test = "create"
+
+case ENV["WHAT_TEST"]
 when "create"
   Tests::Create.new.whole_test
 when "update"
@@ -13,12 +13,16 @@ else
   puts "No such test!"
 end
 
-# придумати як можна заранити декілька тестів обмежитись одною змінною
-# перенести тести в кукунбмер і створити новий фіча фейл в якому будуть ці три тести і записати ці три тести в сценаріях
-# описати ці степи на рубі
-#REQUIRE спробувати
+# git_ignore CMD + K
+# видалити перед гіт ігнор файли які були залиті на гіт
+# запушити папку на гіт
 
-
-
-
+# #зробити щоб біфор викликався в усіх тестах але був написати в одному місці ++++
+# get location має +- виглядати як delete (get location сховати ріквести) ++++
+# file_run має мати всі new і ми передаємо стрінгою назву тесту який запускаємо ++++
+# всі рекваєр перенести в модуль ???
+# глянути чи треба інклуд локейшенс ++++
+# $LOAD_PATH? чи можна зробити через рекваєр
+# у всіх методах має бути теж перевірка статусів ++++
 # https://www.atlassian.com/git/tutorials/merging-vs-rebasing
+# updated
