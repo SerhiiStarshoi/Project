@@ -8,5 +8,5 @@ when "update"
 when "delete"
   Tests::Deactivate.new.whole_test
 else
-  puts "No such test!!"
+  puts "No such test!"
 end
