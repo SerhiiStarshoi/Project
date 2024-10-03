@@ -1,4 +1,9 @@
+require "rspec"
+require_relative '../lib/locations'
+require_relative '../lib/authorization'
+
 module Tests
+
   class Base
     include RSpec::Matchers
 
