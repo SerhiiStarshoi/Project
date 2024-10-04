@@ -4,44 +4,40 @@ Given(/^I authorize as Broker user$/) do
 end
 
 When(/^I create location:$/) do |table|
-  data = table.symbolic_hashes.first
   create_params = {
-    portal_id: data[:portal],
+    portal_id: 16288,
     title: SecureRandom.alphanumeric(11),
-    custom_title: data[:custom_title],
-    type: data[:type],
-    latitude: data[:latitude],
-    longitude: data[:longitude]
+    custom_title: "some title",
+    type: "Standard",
+    latitude: "47.444956",
+    longitude: "18.960501"
   }
-
   @location = @location_manager.create(create_params)
 end
 
 Then(/^I check location details:$/) do |table|
-  data = table.symbolic_hashes.first
-  expect(@location.address).to eq(data[:address])
+  expect(@location.address).to eq("Budaörs, Akron Utca 2, 2040, Pest, Hungary")
 end
 
 When(/^I update location coordinates:$/) do |table|
-  data = table.symbolic_hashes.first
   update_params = {
-    portal_id: data[:portal],
+    portal_id: 16288,
     title: SecureRandom.alphanumeric(11),
-    custom_title: data[:custom_title],
+    custom_title: "UPDATED",
     id: @location.id,
-    type: data[:type],
-    latitude: data[:latitude],
-    longitude: data[:longitude]
+    type: "Standard",
+    latitude: "47.144312",
+    longitude: "21.64162"
   }
   @updated_location = @location_manager.update(update_params, @location)
 end
 
 Then(/^I check location is updated:$/) do |table|
-  data = table.symbolic_hashes.first
   aggregate_failures do
-    expect(@updated_location.custom_title).to eq(data[:custom_title])
-    expect(@updated_location.latitude.to_s).to eq(data[:latitude])
-    expect(@updated_location.longitude.to_s).to eq(data[:longitude])
+    expect(@updated_location.custom_title).to eq("UPDATED")
+    expect(@updated_location.latitude).to eq(47.14431)
+    expect(@updated_location.longitude).to eq(21.64162)
+    expect(@updated_location.type).to eq("Standard")
   end
 end
 
@@ -50,6 +46,5 @@ When(/^I deactivate location$/) do |table|
 end
 
 Then(/^I check location is deactivated:$/) do |table|
-  location_state = table.symbolic_hashes.first[:activated]
-  expect(@location_manager.get_location(@location).activated.to_s).to eq(location_state)
+  expect(@location_manager.get_location(@location).activated).to eq(false)
 end
