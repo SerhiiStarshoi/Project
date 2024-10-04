@@ -1,7 +1,6 @@
 require "http"
-require "pry"
-require "rspec"
 require "securerandom"
+require "rspec"
 
 require_relative "../../lib/locations"
 require_relative "../../tests"
