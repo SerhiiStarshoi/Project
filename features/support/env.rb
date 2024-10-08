@@ -1,6 +1,6 @@
 require "http"
-require "securerandom"
 require "rspec"
+require "securerandom"
 
 require_relative "../../lib/locations"
 require_relative "../../tests"
