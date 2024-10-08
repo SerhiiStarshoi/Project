@@ -1,4 +1,3 @@
-require 'bigdecimal'
 require "http"
 require "rspec"
 require "securerandom"

@@ -41,6 +41,12 @@ module Locations
       Location.new(JSON.parse(response.body))
     end
 
+    def search_if_activated(location_title)
+      response = location_call_search(location_title)
+      search_array = JSON.parse(response.body)
+      search_array[0]["activated"]
+    end
+
     private
 
     def location_call_get(location)
@@ -69,6 +75,11 @@ module Locations
       call_delete = http.put(deactivate_url)
       expect(call_delete.status).to eq(200)
       call_delete
+    end
+
+    def location_call_search(location_title)
+      search_url = "https://location-management.az-dev.over-haul.com/api/v1/locations?page=1&per_page=10&sort=&query=#{location_title}&filters=%7B%22portal_ids%22:[],%22types%22:[],%22statuses%22:[%22active%22,%22inactive%22]%7D"
+      http.get(search_url)
     end
 
     def json_attributes(params)
