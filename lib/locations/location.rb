@@ -15,7 +15,7 @@ module Locations
       @activated = data["activated"]
     end
 
-    def to_s #вияснити чому не виводить puts = p
+    def to_s
       data
     end
 

@@ -19,10 +19,16 @@ end
 
 Then(/^I check location details:$/) do |table|
   data = table.symbolic_hashes.first
-  expect(@location.address).to eq(data[:address])
+  location_state = table.symbolic_hashes.first[:activated]
+  location_to_check = @updated_location || @location
+  expect(location_to_check.custom_title).to eq(data[:custom_title])
+  expect(location_to_check.latitude.to_s).to eq(data[:latitude].to_s)
+  expect(location_to_check.longitude.to_s).to eq(data[:longitude].to_s)
+  expect(location_to_check.address).to eq(data[:address])
+  expect(@location_manager.get_location(@location).activated.to_s).to eq(location_state)
 end
 
-When(/^I update location coordinates:$/) do |table|
+When(/^I update location coordinates, title, coordinates:$/) do |table|
   data = table.symbolic_hashes.first
   update_params = {
     portal_id: data[:portal],
@@ -36,20 +42,15 @@ When(/^I update location coordinates:$/) do |table|
   @updated_location = @location_manager.update(update_params, @location)
 end
 
-Then(/^I check location is updated:$/) do |table|
-  data = table.symbolic_hashes.first
-  aggregate_failures do
-    expect(@updated_location.custom_title).to eq(data[:custom_title])
-    expect(@updated_location.latitude.to_s).to eq(data[:latitude])
-    expect(@updated_location.longitude.to_s).to eq(data[:longitude])
-  end
-end
+# Then(/^I check location is updated:$/) do |table|
+#   data = table.symbolic_hashes.first
+#   aggregate_failures do
+#     expect(@updated_location.custom_title).to eq(data[:custom_title])
+#     expect(@updated_location.latitude.to_s).to eq(data[:latitude])
+#     expect(@updated_location.longitude.to_s).to eq(data[:longitude])
+#   end
+# end
 
 When(/^I deactivate location$/) do |table|
   @location_manager.delete(@location)
-end
-
-Then(/^I check location is deactivated:$/) do |table|
-  location_state = table.symbolic_hashes.first[:activated]
-  expect(@location_manager.get_location(@location).activated.to_s).to eq(location_state)
 end

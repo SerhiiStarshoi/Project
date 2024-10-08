@@ -1,5 +1,5 @@
+require 'bigdecimal'
 require "http"
-require "pry"
 require "rspec"
 require "securerandom"
 
