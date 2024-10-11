@@ -1,8 +1,3 @@
-Given(/^I authorize as Broker user$/) do
-  authorization = Authorization.new
-  @location_manager = Locations::LocationManager.new(authorization.receive_token)
-end
-
 When(/^I create location:$/) do |table|
   data = table.symbolic_hashes.first
   create_params = {
@@ -57,9 +52,6 @@ end
 When(/^I deactivate location:$/) do |table|
   @location_manager.delete(@location)
 end
-
-
-
 
 Then(/^I check location is deactivated:$/) do |table|
   data = table.symbolic_hashes.first

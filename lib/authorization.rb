@@ -5,14 +5,23 @@ class Authorization
   include RSpec::Matchers
 
   EMAIL_AUTH = "api/v1/email-auth"
-  def receive_token
+
+  def http
+    HTTP.headers(accept: "application/json")
+  end
+  def receive_token(user)
 
     url = "#{ENV["AUTH_LINK"]}#{EMAIL_AUTH}"
 
-    response = HTTP.headers(accept: "application/json")
-                   .post(url, json: { email: ENV["EMAIL"], password: ENV["PASSWORD"] })
+    if user == "admin"
+      response = http.post(url, json: { email: ENV["ADMIN_EMAIL"], password: ENV["PASSWORD"] })
+      expect(response.status).to eq(200)
+    end
 
-    expect(response.status).to eq(200) # This matcher checks if the status code is in the 2xx range
+    if user == "broker"
+      response = http.post(url, json: { email: ENV["BROKER_EMAIL"], password: ENV["PASSWORD"] })
+      expect(response.status).to eq(200)
+    end
 
     token = response['Authorization']
     token.sub("Bearer ", "")
