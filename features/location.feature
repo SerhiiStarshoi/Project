@@ -1,3 +1,4 @@
+@broker_auth
 Feature: Locations
 
   Scenario: Create location
@@ -29,11 +30,3 @@ Feature: Locations
     Then I check location is deactivated:
       | activated |
       | false     |
-
-    #I authorize as Broker user - before hook
-    #3 tests create, update, deactivate device + cucumber
-    #tags cucumber (2 девайс + 1 локейшен наприклад)
-
-    #test folder remove
-    #selenium (web driver)
-    #rspec minitest
