@@ -1,5 +1,7 @@
+@broker_auth @locations
 Feature: Locations
 
+  @create
   Scenario: Create location
     When I create location:
       | portal | name     | custom title | type     | latitude  | longitude |
@@ -8,6 +10,7 @@ Feature: Locations
       | name     | custom title | latitude | longitude | address                                    | activated |
       | AT_RANGE | some title   | 47.44496 | 18.9605   | Budaörs, Akron Utca 2, 2040, Pest, Hungary | true      |
 
+  @update
   Scenario: Update location
     When I create location:
       | portal | name     | custom title | type     | latitude  | longitude |
@@ -19,6 +22,7 @@ Feature: Locations
       | name     | custom title | latitude | longitude | address                                    | activated |
       | AT_RANGE | UPDATED      | 47.14431 | 21.64162  | Budaörs, Akron Utca 2, 2040, Pest, Hungary | true      |
 
+  @deactivate
   Scenario: Deactivate location
     When I create location:
       | portal | name     | custom title | type     | latitude  | longitude |
@@ -29,11 +33,3 @@ Feature: Locations
     Then I check location is deactivated:
       | activated |
       | false     |
-
-    #I authorize as Broker user - before hook
-    #3 tests create, update, deactivate device + cucumber
-    #tags cucumber (2 девайс + 1 локейшен наприклад)
-
-    #test folder remove
-    #selenium (web driver)
-    #rspec minitest

@@ -1,5 +1,6 @@
 require "http"
 require "rspec"
+require "cucumber"
 
 class Authorization
   include RSpec::Matchers
@@ -12,16 +13,9 @@ class Authorization
   def receive_token(user)
 
     url = "#{ENV["AUTH_LINK"]}#{EMAIL_AUTH}"
+    response = http.post(url, json: { email: user["email"], password: user["password"] })
 
-    if user == "admin"
-      response = http.post(url, json: { email: ENV["ADMIN_EMAIL"], password: ENV["PASSWORD"] })
-      expect(response.status).to eq(200)
-    elsif user == "broker"
-      response = http.post(url, json: { email: ENV["BROKER_EMAIL"], password: ENV["PASSWORD"] })
-      expect(response.status).to eq(200)
-    else
-      puts "No such user"
-    end
+    expect(response.status.code).to eq(200)
 
     token = response['Authorization']
     token.sub("Bearer ", "")

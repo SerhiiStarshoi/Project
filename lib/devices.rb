@@ -1,5 +1,5 @@
-require_relative "devices/devices"
-require_relative "devices/device_manager"
+require_relative "devices/device"
+require_relative "devices/manager"
 
 module Devices
 end
