@@ -1,9 +1,9 @@
-Feature: Devices
 
+Feature: Devices
   Scenario: Create Device
     When I create device:
-      | portal | imei     | origin | type  |
-      | 16288  | AT_RANGE | nil    | 14592 |
+      | portal | type  |
+      | 16288  | 14592 |
     Then I check device details:
       | model  | activated |
       | 001den | true      |
@@ -16,8 +16,8 @@ Feature: Devices
       | imei     | origin   |
       | AT_RANGE | 5837333 |
     Then I check device details:
-      | imei     | origin  | model |
-      | AT_RANGE | 5837333 | 001den |
+      | imei     | origin  | model  | device_status      |
+      | AT_RANGE | 5837333 | 001den | assigned_to_origin |
 
   Scenario: Deactivate Device
     When I create device:
@@ -30,3 +30,6 @@ Feature: Devices
       | activated |
       | false     |
 
+  # Then  #expect if at least 1 element present to delete scenario
+  # different combinations of tests (create device + create location for example)
+  # login & pass as hash instead user

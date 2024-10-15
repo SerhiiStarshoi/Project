@@ -10,9 +10,8 @@ require_relative "../../lib/locations/location_manager"
 require_relative "../../tests"
 require_relative "../../tests/base"
 require_relative "../../tests/create"
-require_relative "../../tests/deactivate"
 require_relative "../../tests/update"
-
+require_relative "../../tests/deactivate"
 
 Before do
   authorization = Authorization.new

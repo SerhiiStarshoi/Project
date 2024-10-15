@@ -1,3 +1,4 @@
+@broker_auth
 Feature: Locations
 
   Scenario: Create location
