@@ -16,11 +16,11 @@ class Authorization
     if user == "admin"
       response = http.post(url, json: { email: ENV["ADMIN_EMAIL"], password: ENV["PASSWORD"] })
       expect(response.status).to eq(200)
-    end
-
-    if user == "broker"
+    elsif user == "broker"
       response = http.post(url, json: { email: ENV["BROKER_EMAIL"], password: ENV["PASSWORD"] })
       expect(response.status).to eq(200)
+    else
+      puts "No such user"
     end
 
     token = response['Authorization']
