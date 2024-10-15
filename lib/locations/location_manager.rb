@@ -41,6 +41,12 @@ module Locations
       Location.new(JSON.parse(response.body))
     end
 
+    def search_if_activated(location_title)
+      response = location_call_search(location_title)
+      search_array = JSON.parse(response.body)
+      search_array[0]["activated"]
+    end
+
     private
 
     def location_call_get(location)
@@ -56,7 +62,6 @@ module Locations
 
     def location_call_update(location, params)
       update_url = "#{LOCATION_URL}/#{location.id}"
-      #puts "URL of location to be updated: #{update_url}"
       call_update = http.put(update_url, json: json_attributes(params))
       expect(call_update.status).to eq(200)
       call_update
@@ -64,11 +69,14 @@ module Locations
 
     def location_call_delete(location)
       deactivate_url = "#{LOCATION_URL}/#{location.id}/deactivate"
-      #puts "ID of location which was deactivated: #{location.id}"
-      #puts "Deactivate URL: #{deactivate_url}"
       call_delete = http.put(deactivate_url)
       expect(call_delete.status).to eq(200)
       call_delete
+    end
+
+    def location_call_search(location_title)
+      search_url = "https://location-management.az-dev.over-haul.com/api/v1/locations?page=1&per_page=10&sort=&query=#{location_title}&filters=%7B%22portal_ids%22:[],%22types%22:[],%22statuses%22:[%22active%22,%22inactive%22]%7D"
+      http.get(search_url)
     end
 
     def json_attributes(params)

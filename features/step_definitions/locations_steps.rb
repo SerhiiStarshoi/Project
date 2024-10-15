@@ -1,50 +1,61 @@
-Given(/^I authorize as Broker user$/) do
-  authorization = Authorization.new
-  @location_manager = Locations::LocationManager.new(authorization.receive_token)
-end
-
 When(/^I create location:$/) do |table|
+  data = table.symbolic_hashes.first
   create_params = {
-    portal_id: 16288,
+    portal_id: data[:portal],
     title: SecureRandom.alphanumeric(11),
-    custom_title: "some title",
-    type: "Standard",
-    latitude: "47.444956",
-    longitude: "18.960501"
+    custom_title: data[:custom_title],
+    type: data[:type],
+    latitude: data[:latitude],
+    longitude: data[:longitude]
   }
+
   @location = @location_manager.create(create_params)
 end
 
 Then(/^I check location details:$/) do |table|
-  expect(@location.address).to eq("Budaörs, Akron Utca 2, 2040, Pest, Hungary")
-end
+  table.hashes.each do |row|
+    data = table.symbolic_hashes.first
+    location_state = table.symbolic_hashes.first[:activated]
 
-When(/^I update location coordinates:$/) do |table|
-  update_params = {
-    portal_id: 16288,
-    title: SecureRandom.alphanumeric(11),
-    custom_title: "UPDATED",
-    id: @location.id,
-    type: "Standard",
-    latitude: "47.144312",
-    longitude: "21.64162"
-  }
-  @updated_location = @location_manager.update(update_params, @location)
-end
-
-Then(/^I check location is updated:$/) do |table|
-  aggregate_failures do
-    expect(@updated_location.custom_title).to eq("UPDATED")
-    expect(@updated_location.latitude).to eq(47.14431)
-    expect(@updated_location.longitude).to eq(21.64162)
-    expect(@updated_location.type).to eq("Standard")
+    case
+    when @updated_location
+      expect(@updated_location.custom_title).to eq(data[:custom_title])
+      expect(@updated_location.latitude.to_s).to eq(data[:latitude].to_s)
+      expect(@updated_location.longitude.to_s).to eq(data[:longitude].to_s)
+      expect(@updated_location.address).to eq(data[:address])
+      expect(@location_manager.get_location(@location).activated.to_s).to eq(location_state)
+    when @location
+      expect(@location.custom_title).to eq(data[:custom_title])
+      expect(@location.latitude.to_s).to eq(data[:latitude].to_s)
+      expect(@location.longitude.to_s).to eq(data[:longitude].to_s)
+      expect(@location.address).to eq(data[:address])
+      expect(@location_manager.get_location(@location).activated.to_s).to eq(location_state)
+    end
   end
 end
 
-When(/^I deactivate location$/) do |table|
+When(/^I update location:$/) do |table|
+  data = table.symbolic_hashes.first
+  update_params = {
+    portal_id: @location.portal_id,
+    title: SecureRandom.alphanumeric(11), # not working without
+    custom_title: data[:custom_title],
+    id: @location.id,
+    type: @location.type,
+    latitude: data[:latitude],
+    longitude: data[:longitude]
+  }
+  @updated_location = @location_manager.update(update_params, @location) #updated_location = location
+  #remove fetch and add it to check location step
+end
+
+When(/^I deactivate location:$/) do |table|
   @location_manager.delete(@location)
 end
 
 Then(/^I check location is deactivated:$/) do |table|
-  expect(@location_manager.get_location(@location).activated).to eq(false)
+  data = table.symbolic_hashes.first
+  #search by location title or smth else, activated?
+  activated = @location_manager.search_if_activated(@location.title)
+  expect(activated.to_s).to eq(data[:activated].to_s)
 end
