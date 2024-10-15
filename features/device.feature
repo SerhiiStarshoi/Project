@@ -29,4 +29,3 @@ Feature: Devices
     Then I check device is deactivated:
       | activated |
       | false     |
-

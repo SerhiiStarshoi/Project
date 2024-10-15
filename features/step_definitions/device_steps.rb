@@ -44,5 +44,7 @@ end
 
 Then(/^I check device is deactivated:$/) do |table|
   data = table.symbolic_hashes.first
-  expect(@device_manager.search(@created_device.imei).to_s).to eq(data[:activated].to_s)
+  searched_device = @device_manager.search(@created_device.imei)
+  puts searched_device.inspect
+  expect(searched_device.activated.to_s).to eq(data[:activated].to_s)
 end
