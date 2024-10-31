@@ -54,8 +54,3 @@ Then(/^I check device is deactivated:$/) do |table|
   expect(searched_device).not_to be_nil, "Can't find device"
   expect(searched_device.activated.to_s).to eq(data[:activated].to_s)
 end
-
-#message в рамці забрати
-#зробити що буде видно що я всі поля не перевіряю
-# вебдрайвер
-# відкрити нашу сторінку ui_test.feature який буде відкривати логін сторінку (перевірити лінка така як треба)
