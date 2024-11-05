@@ -27,7 +27,7 @@ When(/^I click "([^"]*)" button$/) do |title|
 end
 
 When(/^I fill in data:$/) do |table|
-  @new_user.fill_in(table.symbolic_hashes.first, @login_page.instance_variable_get(:@driver))
+  MyTeamPage.new(@login_page.instance_variable_get(:@driver)).fill_in(table.symbolic_hashes.first, @login_page.instance_variable_get(:@driver))
 end
 
 Then(/^I check user is created:$/) do |table|
@@ -67,29 +67,24 @@ When(/^I press login button$/) do
 end
 
 Then(/^I check Command Center page is opened:$/) do |table|
-  @command_center = CommandCenter.new(@login_page.instance_variable_get(:@driver))
   data = table.symbolic_hashes.first
-  expect( @command_center.check_if_opened?).to eq(data[:url])
+  expect(CommandCenter.new(@login_page.instance_variable_get(:@driver)).check_if_opened?).to eq(data[:url])
 end
 
 When(/^I open My Team page$/) do
-  @new_user = MyTeamPage.new(@login_page.instance_variable_get(:@driver))
-  @new_user.open
+  MyTeamPage.new(@login_page.instance_variable_get(:@driver)).open
 end
 
 When(/^I search for user$/) do |table|
   data = table.symbolic_hashes.first
-  puts data[:email]
-  @searched_user = @new_user.search(data[:email]) #user_manager class (module)
+  @searched_user = MyTeamPage.new(@login_page.instance_variable_get(:@driver)).search(data[:email]) #user_manager class (module)
 end
 
 And(/^I deactivate user$/) do
-  user_manager = UserManager.new(@login_page.instance_variable_get(:@driver))
   puts @searched_user.email
-  user_manager.deactivate_user(@searched_user.email)
+  UserManager.new(@login_page.instance_variable_get(:@driver)).deactivate_user(@searched_user.email)
 end
 
 And(/^I check user is deactivated$/) do
-  my_team_page = MyTeamPage.new(@login_page.instance_variable_get(:@driver))
-  expect(my_team_page.search(@searched_user.email)).to be false
+  expect(MyTeamPage.new(@login_page.instance_variable_get(:@driver)).search(@searched_user.email)).to be false
 end
