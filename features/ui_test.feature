@@ -25,15 +25,15 @@ Feature: UI Test
     When I open My Team page
     And I click "Add user" button
     And I fill in data:
-      | First Name | Last Name | Email              | Role          |
-      | Serhii     | Starshoi  | 1312fvev@gmail.com | Watch Officer |
+      | First Name | Last Name | Email             | Role          |
+      | Serhii     | Starshoi  | 3313223@gmail.com | Watch Officer |
     And I click "Save" button
     And I search for user
-      | Email              |
-      | 1312fvev@gmail.com |
+      | Email                  |
+      | 3313223@gmail.com |
     Then I check user is created:
-      | First Name | Last Name | Email              | Role       |
-      | Serhii     | Starshoi  | 1312fvev@gmail.com | br_watcher |
+      | First Name | Last Name | Email                  | Role       |
+      | Serhii     | Starshoi  | 3313223@gmail.com | br_watcher |
 
   @deactivate_watch_officer
   Scenario: Deactivate created Watch Officer user
@@ -51,19 +51,18 @@ Feature: UI Test
     And I check user is deactivated
 
 
+  #1. deactivate перенести в myteampage X
+  #2. deactivate зробити апішну і кинути в хуки X
+  #3. ініціалізувати драйвер в середині кожної пейджі private attr_reader
+  #4. переобити степи під клік на ріних пейджах (а не один універсальний)
+  #5. Add User має працюватиз myteampage а не логін, можна в степі зроьбити через іф-ку X
+  #6. https://en.wikipedia.org/wiki/SOLID
+  #7. User_Manager і пейджі не має бути новий а переюзатись існуючий X
+  #8. pageobject pattern - почитати
+  #9 guard_clause
+  #10 user_attrs =  @searched_user.attrs.slice(*data.keys)
+  #      expect(user_attrs.values.any?(&:nil?)).to be false case/when X
+  #11 хук на деактивацію щоб відбувався під кожним сценарієм, робив серч по юзер емейл і дивився чи ніл чи ні, якещо не ніл то деактивовуємо далі X
 
-#  1. розібратись чому два браузера X
-#  2. переробити степ перевірки юзера, щоб не використовувати масив tested_key X
-#  3. не зберігати MyTeamPage в змінну ?
-#  4. зробити users manager X
-#  5. додати апішний метод для деактивації і деактивовувати юзер в хуках X
-#  6. окремий тест для деактивації юзера через UI X
-
-#  8. виділити клас LoginPage
-#  9. додати метод #open for MyTeamPage, LoginPage
-#  10. вся UI логіка має бути в пейджах
-#  11. Command Center page with method #opened? (edited) X
-
-  #  7. pageobject pattern - почитати
 
 

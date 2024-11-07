@@ -7,7 +7,6 @@ class MyTeamPage
     @wait = Selenium::WebDriver::Wait.new(timeout: 5)
   end
 
-
   def open
     @driver.navigate.to "#{ENV['APP_URL']}app/profile/team"
   end
@@ -37,12 +36,12 @@ class MyTeamPage
   def search(email)
     response = user_call_search(email)
     search_array = JSON.parse(response.body)
-    if search_array.empty?
-      false
-    else
-      puts search_array
-      User.new(search_array.first)
-    end
+
+    return nil if search_array.empty?
+
+    puts "User created: #{search_array}"
+    User.new(search_array.first)
+
   end
 
   def user_call_search(email)
@@ -50,7 +49,6 @@ class MyTeamPage
       "email" => ENV["EMAIL"],
       "password" => ENV["PASSWORD"]
     }
-    puts broker
 
     token =  Authorization.new.receive_token(broker)
     puts "token: #{token.inspect}"
@@ -60,5 +58,56 @@ class MyTeamPage
     puts search_url
     HTTP.headers(accept: "application/json", authorization: "Bearer #{token}").get(search_url)
   end
-end
 
+  def deactivate_user_ui(email)
+    @driver.navigate.to "#{ENV['APP_URL']}app/profile/team/brokers?query=#{email}"
+    sleep(2)
+    deactivate_user_button = @wait.until { @driver.find_element(css: 'button[data-test-id="deactivate-broker-user-btn"]') }
+    @wait.until { deactivate_user_button.displayed? && deactivate_user_button.enabled? }
+    sleep(2)
+    deactivate_user_button.click
+    sleep(2)
+
+    deactivate_user_button_confirm= @wait.until { @driver.find_element(css: 'button[data-test-id="modal_success_button"]')  }
+    @wait.until { deactivate_user_button_confirm.displayed? && deactivate_user_button_confirm.enabled? }
+    deactivate_user_button_confirm.click
+
+    sleep 2
+  end
+
+  def deactivate_user_api(user_id)
+    broker = {
+      "email" => ENV["EMAIL"],
+      "password" => ENV["PASSWORD"]
+    }
+
+    token =  Authorization.new.receive_token(broker)
+    deactivate_url = "#{ENV['APP_URL']}api/v2/users/#{user_id}/deactivate"
+    if user_id.nil?
+      HTTP.headers(accept: "application/json", authorization: "Bearer #{token}").put(deactivate_url)
+    else
+      nil
+    end
+  end
+
+  def add_user
+    sleep 3
+    add_user_button = @wait.until { @driver.find_element(css: 'button[data-test-id="add-broker-user-btn"]') }
+    add_user_button.click
+
+    #pop_up = @wait.until { @driver.find_element(css: '[data-test-id="add-broker-user-modal"]')  }
+    #expect(pop_up.displayed?).to be true
+  end
+
+  def save_user
+    sleep 3
+    save_user_button = @wait.until { @driver.find_element(css: 'button[data-test-id="modal_success_button"]') }
+    save_user_button.click
+  end
+
+
+
+
+
+
+end
