@@ -25,44 +25,40 @@ Feature: UI Test
     When I open My Team page
     And I click "Add user" button
     And I fill in data:
-      | First Name | Last Name | Email             | Role          |
-      | Serhii     | Starshoi  | 3313223@gmail.com | Watch Officer |
+      | First Name | Last Name | Email                | Role          |
+      | Serhii     | Starshoi  | 2213313223@gmail.com | Watch Officer |
     And I click "Save" button
     And I search for user
-      | Email                  |
-      | 3313223@gmail.com |
+      | Email              |
+      | 13313223@gmail.com |
     Then I check user is created:
-      | First Name | Last Name | Email                  | Role       |
-      | Serhii     | Starshoi  | 3313223@gmail.com | br_watcher |
+      | First Name | Last Name | Email                | Role       |
+      | Serhii     | Starshoi  | 2213313223@gmail.com | br_watcher |
 
   @deactivate_watch_officer
   Scenario: Deactivate created Watch Officer user
     Given I login as Broker user
     When I open My Team page
-    And I click "Add user" button
+    And I click "Add user" button on "My Team" page
     And I fill in data:
-      | First Name | Last Name | Email              | Role          |
-      | Serhii     | Starshoi  | 1312fvev@gmail.com | Watch Officer |
-    And I click "Save" button
+      | First Name | Last Name | Email                     | Role          |
+      | Serhii     | Starshoi  | 2tf2g12312fvev2@gmail.com | Watch Officer |
+    And I click "Save" button on "Add New User" pop up
     And I search for user
-      | Email              |
-      | 1312fvev@gmail.com |
+      | Email                     |
+      | 2tf2g12312fvev2@gmail.com |
     And I deactivate user
     And I check user is deactivated
 
 
-  #1. deactivate перенести в myteampage X
-  #2. deactivate зробити апішну і кинути в хуки X
-  #3. ініціалізувати драйвер в середині кожної пейджі private attr_reader
-  #4. переобити степи під клік на ріних пейджах (а не один універсальний)
-  #5. Add User має працюватиз myteampage а не логін, можна в степі зроьбити через іф-ку X
-  #6. https://en.wikipedia.org/wiki/SOLID
-  #7. User_Manager і пейджі не має бути новий а переюзатись існуючий X
-  #8. pageobject pattern - почитати
-  #9 guard_clause
-  #10 user_attrs =  @searched_user.attrs.slice(*data.keys)
-  #      expect(user_attrs.values.any?(&:nil?)).to be false case/when X
-  #11 хук на деактивацію щоб відбувався під кожним сценарієм, робив серч по юзер емейл і дивився чи ніл чи ні, якещо не ніл то деактивовуємо далі X
-
-
-
+  #1. deactivate user api -> user manager і search теж, переглянути решту чи щось ще треба перенести X
+  #2. @driver.navigate.to "#{ENV['APP_URL']}app/profile/team/brokers?query=#{email}" має бути не там а в серчі X
+  #3. Before("@broker_auth") do додати UserManager.new(token) X
+  #4. #@searched_user check if not null, if not than deactivate_api in hook X
+  #5. classes all in lib/pages (ui)  + in lib/api (api) X
+  #6. remove instance_variable_get(:@driver)).check_if_opened?).to eq(data[:url]) (command_center) X
+  #7. переобити степи під клік на ріних пейджах (а не один універсальний)
+  #When(/^I click "([^"]*)" button$/) do |title| зробити щоб метод клік був один на всіх пейджах,
+  # приймав тайтл і міг клікнути але перед тим перевіряти яка пейджа. Перейменувати на сценарії on Location page (for example)
+  #8. переробити все під pageobject pattern in myteampage X
+  #9. expect(@searched_user.first_name). to eq(value) дописати решту X

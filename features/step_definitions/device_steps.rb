@@ -50,7 +50,7 @@ end
 
 Then(/^I check device is deactivated:$/) do |table|
   data = table.symbolic_hashes.first
-  searched_device = @device_manager.search(@device.imei)
+  searched_device = @device_manager.search_user(@device.imei)
   expect(searched_device).not_to be_nil, "Can't find device"
   expect(searched_device.activated.to_s).to eq(data[:activated].to_s)
 end

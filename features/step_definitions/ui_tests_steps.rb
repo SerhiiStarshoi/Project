@@ -29,21 +29,24 @@ When(/^I click "([^"]*)" button$/) do |title|
 end
 
 Then(/^I check user is created:$/) do |table|
-  table.symbolic_hashes.each do |data|
+  table.hashes.first.each do |key, value|
     aggregate_failures do
-      user_attrs = @searched_user.attrs.slice(*data.keys)
-      case
-      when user_attrs.values.any?(&:nil?)
-        expect(user_attrs.values.any?(&:nil?)).to be false
-      when user_attrs != data
-        expect(user_attrs).to eq(data)
+      case key
+      when "First Name"
+        expect(@searched_user.first_name). to eq(value)
+      when "Last Name"
+        expect(@searched_user.last_name). to eq(value)
+      when "Email"
+        expect(@searched_user.email). to eq(value)
+      when "Role"
+        expect(@searched_user.role). to eq(value)
       end
     end
   end
 end
 
 Given(/^I open Login page$/) do
-  @login_page = Login.new #rename login_page i new(driver)
+  @login_page = LoginPage.new(@driver) #rename login_page i new(driver)
   @login_page.open
 end
 
@@ -61,28 +64,32 @@ end
 
 Then(/^I check Command Center page is opened:$/) do |table|
   data = table.symbolic_hashes.first
-  expect(CommandCenter.new(@login_page.instance_variable_get(:@driver)).check_if_opened?).to eq(data[:url])
+  expect(CommandCenter.new(@driver).check_if_opened?).to eq(data[:url])
 end
 
 When(/^I open My Team page$/) do
-  @my_team_page = MyTeamPage.new(@login_page.instance_variable_get(:@driver))
+  @my_team_page = MyTeamPage.new(@driver)
   @my_team_page.open
 end
 
 When(/^I fill in data:$/) do |table|
-  @my_team_page.fill_in(table.symbolic_hashes.first, @login_page.instance_variable_get(:@driver))
+  @my_team_page.fill_in(table.symbolic_hashes.first, @driver)
 end
 
 
 When(/^I search for user$/) do |table|
   data = table.symbolic_hashes.first
-  @searched_user = @my_team_page.search(data[:email])
+  sleep(2)
+  @searched_user = @user_manager.search_user(data[:email])
 end
 
 And(/^I deactivate user$/) do
-  @my_team_page.deactivate_user_ui(@searched_user.email)
+  @driver.navigate.to "#{ENV['APP_URL']}app/profile/team/brokers?query=#{@searched_user.email}"
+  sleep(2)
+  @my_team_page.deactivate_user_ui
 end
 
 And(/^I check user is deactivated$/) do
-  expect(@my_team_page.search(@searched_user.email)).to be nil
+  expect(@user_manager.search_user(@searched_user.email)).to be nil
 end
+

@@ -7,12 +7,17 @@ end
 Before("@broker_auth") do
   broker = { "email" => ENV["BROKER_EMAIL"], "password" => ENV["PASSWORD"] }
   authorization = Authorization.new
-  @location_manager = Locations::LocationManager.new(authorization.receive_token(broker))
+  token = authorization.receive_token(broker)
+  @location_manager = Locations::LocationManager.new(token)
 end
 
  Before do
    @driver = Selenium::WebDriver.for :chrome
    @wait = Selenium::WebDriver::Wait.new(timeout: 3)
+   broker = { "email" => ENV["BROKER_EMAIL"], "password" => ENV["PASSWORD"] }
+   authorization = Authorization.new
+   token = authorization.receive_token(broker)
+   @user_manager = UserManager.new(token)
  end
 
 After do |scenario|
@@ -20,6 +25,13 @@ After do |scenario|
     puts "Scenario failed: #{scenario.name}"
   else
     puts "Scenario passed: #{scenario.name}"
-    @my_team_page.deactivate_user_api(@searched_user.id)
+
+    puts "SEARCHED_USER #{@searched_user.inspect}"
+
+    if @searched_user
+      @user_manager.deactivate_user_api(@searched_user.id)
+    else
+      puts "No searched user found, skipping deactivation."
+    end
   end
 end
