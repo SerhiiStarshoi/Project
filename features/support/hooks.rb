@@ -20,7 +20,6 @@ After("@create_watch_officer") do |scenario|
     puts "Scenario failed: #{scenario.name}"
   else
     puts "Scenario passed: #{scenario.name}"
-    user_manager = UserManager.new(@login_page.instance_variable_get(:@driver))
-    user_manager.deactivate_user(@searched_user.email)
+    @my_team_page.deactivate_user_api(@searched_user.id)
   end
 end

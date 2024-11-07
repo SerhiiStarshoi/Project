@@ -7,7 +7,6 @@ class MyTeamPage
     @wait = Selenium::WebDriver::Wait.new(timeout: 5)
   end
 
-
   def open
     @driver.navigate.to "#{ENV['APP_URL']}app/profile/team"
   end
@@ -37,12 +36,12 @@ class MyTeamPage
   def search(email)
     response = user_call_search(email)
     search_array = JSON.parse(response.body)
-    if search_array.empty?
-      false
-    else
-      puts search_array
-      User.new(search_array.first)
-    end
+
+    return nil if search_array.empty?
+
+    puts "User created: #{search_array}"
+    User.new(search_array.first)
+
   end
 
   def user_call_search(email)
@@ -50,7 +49,6 @@ class MyTeamPage
       "email" => ENV["EMAIL"],
       "password" => ENV["PASSWORD"]
     }
-    puts broker
 
     token =  Authorization.new.receive_token(broker)
     puts "token: #{token.inspect}"
@@ -59,6 +57,34 @@ class MyTeamPage
 
     puts search_url
     HTTP.headers(accept: "application/json", authorization: "Bearer #{token}").get(search_url)
+  end
+
+  def deactivate_user_ui(email)
+    @driver.navigate.to "#{ENV['APP_URL']}app/profile/team/brokers?query=#{email}"
+    sleep(2)
+    deactivate_user_button = @wait.until { @driver.find_element(css: 'button[data-test-id="deactivate-broker-user-btn"]') }
+    @wait.until { deactivate_user_button.displayed? && deactivate_user_button.enabled? }
+    sleep(2)
+    deactivate_user_button.click
+    sleep(2)
+
+    deactivate_user_button_confirm= @wait.until { @driver.find_element(css: 'button[data-test-id="modal_success_button"]')  }
+    @wait.until { deactivate_user_button_confirm.displayed? && deactivate_user_button_confirm.enabled? }
+    deactivate_user_button_confirm.click
+
+    sleep 2
+  end
+
+  def deactivate_user_api(user_id)
+    broker = {
+      "email" => ENV["EMAIL"],
+      "password" => ENV["PASSWORD"]
+    }
+    puts "here"
+
+    token =  Authorization.new.receive_token(broker)
+    deactivate_url = "#{ENV['APP_URL']}api/v2/users/#{user_id}/deactivate"
+    HTTP.headers(accept: "application/json", authorization: "Bearer #{token}").put(deactivate_url)
   end
 end
 
