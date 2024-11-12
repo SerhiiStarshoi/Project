@@ -1,4 +1,4 @@
-require_relative "../authorization"
+require_relative "../api/authorization"
 
 module Devices
   class Device #rename

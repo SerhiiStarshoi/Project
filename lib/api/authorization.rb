@@ -22,4 +22,3 @@ class Authorization
   end
 end
 
-
