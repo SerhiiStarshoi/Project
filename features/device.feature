@@ -1,7 +1,7 @@
 @admin_auth @devices
 Feature: Devices
 
-  @create
+  @create_device
   Scenario: Create Device
     When I create device:
       | portal | type  |
@@ -10,7 +10,7 @@ Feature: Devices
       | model  | origin | device_status      | activated |
       | 001den |        | assigned_to_portal | true      |
 
-  @update
+  @update_device
   Scenario: Update Device
     When I create device:
       | portal | imei     | origin | type  |
@@ -22,7 +22,7 @@ Feature: Devices
       | imei     | origin  | model  | device_status      |
       | AT_RANGE | 5837333 | 001den | assigned_to_origin |
 
-  @deactivate
+  @deactivate_device
   Scenario: Deactivate Device
     When I create device:
       | portal | imei     | origin | type  |

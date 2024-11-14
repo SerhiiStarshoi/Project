@@ -15,16 +15,21 @@ When(/^I create device:$/) do |table|
 end
 
 Then(/^I check device details:$/) do |table|
-  data = table.symbolic_hashes.first
-  tested_keys = [:model, :origin, :device_status, :activated] #взяти таблицю і ітеруєм кожен ключ (each key) передбачити всі можливі дані з таблиці
-  #для кожної свій експекс, якщо нема експекта на таку - помилка
-  #
-  aggregate_failures do
-    puts @generated_imei.inspect
-    expect(@device.imei.encode("UTF-8")).to eq(@generated_imei)
-    expect(@device.origin_location["id"].to_s).to eq(data[:origin])
-    expect(@device.device_status).to eq(data[:device_status])
-    expect(data.keys).to match_array(tested_keys)
+  table.hashes.first.each do |key, value|
+    aggregate_failures do
+      case key
+      when "imei"
+        expect(@device.imei.encode("UTF-8")).to eq(@generated_imei)
+      when "origin"
+        expect(@device.origin_location["id"].to_s).to eq(value)
+      when "model"
+        expect(@device.device_model). to eq(value)
+      when "device_status"
+        expect(@device.device_status).to eq(value)
+      else
+        raise "Unexpected key: #{key}"
+      end
+    end
   end
 end
 
@@ -50,7 +55,7 @@ end
 
 Then(/^I check device is deactivated:$/) do |table|
   data = table.symbolic_hashes.first
-  searched_device = @device_manager.search_user(@device.imei)
+  searched_device = @device_manager.search(@device.imei)
   expect(searched_device).not_to be_nil, "Can't find device"
   expect(searched_device.activated.to_s).to eq(data[:activated].to_s)
 end
