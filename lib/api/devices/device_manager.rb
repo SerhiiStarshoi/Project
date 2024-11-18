@@ -1,19 +1,18 @@
-require "rspec"
-require_relative "device"
+require "rspec" # <- parent class
 
 module Devices
-  class Manager
-    include RSpec::Matchers
+  class DeviceManager
+    include RSpec::Matchers # <- parent class
 
-    attr_reader :token
+    attr_reader :token # <- parent class
 
     DEVICE_URL = "#{ENV['API_V3']}device_management/devices"
 
-    def initialize(token)
+    def initialize(token)# <- parent class
       @token = token
     end
 
-    def http
+    def http # <- parent class
       HTTP.headers(accept: "application/json", authorization: "Bearer #{token}")
     end
 

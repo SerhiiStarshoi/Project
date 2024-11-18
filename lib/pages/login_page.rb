@@ -1,9 +1,5 @@
 require_relative "page"
 class LoginPage < Page
-  def initialize(driver)
-    @driver = driver
-    @wait = Selenium::WebDriver::Wait.new(timeout: 10)
-  end
 
   def fill_in_email
     email.send_keys(ENV['EMAIL'])
@@ -22,6 +18,8 @@ class LoginPage < Page
 
   private
 
+  attr_reader :driver
+
   def button(button_name)
     @wait.until { @driver.find_element(xpath: "//*[text()='#{button_name}']") }
   end
@@ -38,6 +36,4 @@ class LoginPage < Page
     sleep(2)
     @wait.until { @driver.find_element(css: 'button[data-test-id="sign-in-btn"]') }
   end
-
-  attr_reader :driver
 end

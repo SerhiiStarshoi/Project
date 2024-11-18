@@ -50,7 +50,7 @@ When(/^I update location:$/) do |table|
 end
 
 When(/^I deactivate location:$/) do |table|
-  @location_manager.delete(@location)
+  @location_manager.deactivate(@location)
 end
 
 Then(/^I check location is deactivated:$/) do |table|

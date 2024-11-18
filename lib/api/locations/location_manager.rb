@@ -1,16 +1,16 @@
 module Locations
   class LocationManager
-    include RSpec::Matchers
+    include RSpec::Matchers # <- parent class
 
-    attr_reader :token
+    attr_reader :token # <- parent class
 
     LOCATION_URL = "#{ENV['LM_LINK']}api/v1/locations"
 
-    def initialize(token)
+    def initialize(token)# <- parent class
       @token = token
     end
 
-    def http
+    def http # <- parent class
       HTTP.headers(accept: "application/json", authorization: "Bearer #{token}")
     end
 
@@ -29,7 +29,7 @@ module Locations
       Location.new(data)
     end
 
-    def delete(location)
+    def deactivate(location)
       response = location_call_delete(location)
       expect(response.status).to eq(200)
       JSON.parse(response.body)
@@ -50,7 +50,7 @@ module Locations
     private
 
     def location_call_get(location)
-      location_check_url = "https://location-management.az-dev.over-haul.com/api/v1/locations/#{location.id}"
+      location_check_url = "https://location-management.az-dev.over-haul.com/api/v1/locations/#{location.id}" #constant use like in location_call_create
       http.get(location_check_url)
     end
 

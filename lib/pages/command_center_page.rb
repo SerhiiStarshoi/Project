@@ -1,4 +1,6 @@
-class CommandCenterPage
+require_relative "page"
+
+class CommandCenterPage < Page
   def initialize(driver)
     @driver = driver
   end

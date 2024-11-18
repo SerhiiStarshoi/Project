@@ -1,11 +1,10 @@
-class MyTeamPage
+require_relative "page"
+
+class MyTeamPage < Page
+  PATH = "app/profile/team"
   def initialize(driver)
     @driver = driver
     @wait = Selenium::WebDriver::Wait.new(timeout: 5)
-  end
-
-  def open
-    @driver.get "#{ENV['APP_URL']}app/profile/team"
   end
 
   def click(button_name)
