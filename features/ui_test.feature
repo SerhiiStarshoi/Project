@@ -23,12 +23,14 @@ Feature: UI Test
     And I click "Add user" button at "My Team" page
     And I fill in data:
       | First Name | Last Name | Email                | Role          |
-      | Serhii     | Starshoi  | 2213313223@gmail.com | Watch Officer |
+      | Serhii     | Starshoi  | 4322143@gmail.com | Watch Officer |
     And I click "Save" button at "My Team" page
     And I search for user
+    | Email |
+    | 4322143@gmail.com |
     Then I check user is created:
       | First Name | Last Name | Email                | Role          |
-      | Serhii     | Starshoi  | 2213313223@gmail.com | Watch Officer |
+      | Serhii     | Starshoi  | 4322143@gmail.com | Watch Officer |
 
   @deactivate_watch_officer
   Scenario: Deactivate created Watch Officer user
@@ -37,21 +39,24 @@ Feature: UI Test
     And I click "Add user" button at "My Team" page
     And I fill in data:
       | First Name | Last Name | Email                     | Role          |
-      | Serhii     | Starshoi  | 2tf2g12312fvev2@gmail.com | Watch Officer |
+      | Serhii     | Starshoi  | 4322143@gmail.com | Watch Officer |
     And I click "Save" button at "My Team" page
     And I search for user
+    |  Email  |
+    | 4322143@gmail.com |
     And I deactivate user
     And I check user is deactivated
 
 
   #1. всі менеджери мають виглядати однаково + переглянути чи немає дублікованих методів
-  # (методи які є однакові в локейшен і юзер менеджер і зроби батьківський клас з наслідуваннями)
-  #2. search_ui все таки моє шукати по мейлу і розбити на менші якщо 20+ рядків буде
-  #3. get_user_id(email) замінмити на існуючий клас де ми ініціалізуємо вже новий обєкт
-  #4. модуль для юзерів і для пейджз і для авторизацій теж додати
-  #5. click який у 2ох пейджах перенести в -> Page
-  #6. модуль апі який буде рікваєр рілейтив все що там лежить
-  #7. def search_if_activated(location_title) in Locations замінити на метод серч (буде вертати юзера і буду вже брати поле актівейтед)
+  # (методи які є однакові в локейшен і юзер менеджер і зроби батьківський клас з наслідуваннями) X
+  #2. search_ui все таки моє шукати по мейлу і розбити на менші якщо 20+ рядків буде X
+  #3. get_user_id(email) замінмити на існуючий клас де ми ініціалізуємо вже новий обєкт X
+  #4. модуль для юзерів і для пейджз і для авторизацій теж додати X
+  #5. click який у 2ох пейджах перенести в -> Page X
+  #6. модуль апі який буде рікваєр рілейтив все що там лежить X
+  #7. def search_if_activated(location_title) in Locations замінити на метод серч
+  # (буде вертати юзера і буду вже брати поле актівейтед) X
 
 
 

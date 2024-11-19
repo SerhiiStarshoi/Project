@@ -8,4 +8,10 @@ class Page
     @driver.get "#{ENV['APP_URL']}#{self.class::PATH}"
     sleep 3
   end
+
+  def click(button_name)
+    sleep 3
+    button(button_name).click
+    sleep 2
+  end
 end

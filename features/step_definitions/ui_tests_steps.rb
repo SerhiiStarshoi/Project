@@ -74,12 +74,14 @@ When(/^I fill in data:$/) do |table|
   @my_team_page.fill_in(table.symbolic_hashes.first, @driver)
 end
 
-When(/^I search for user$/) do
-  @searched_user = @my_team_page.search_ui
+When(/^I search for user$/) do |table|
+  data = table.symbolic_hashes.first
+  @searched_user = @my_team_page.search_ui(data[:email])
 end
 
 And(/^I deactivate user$/) do
-  @driver.navigate.to "#{ENV['APP_URL']}app/profile/team/brokers?query=#{@searched_user.email}"
+  @driver.get "#{ENV['APP_URL']}app/profile/team/brokers?query=#{@searched_user.email}"
+
   sleep(2)
   @my_team_page.deactivate_user_ui
 end

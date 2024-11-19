@@ -1,35 +1,32 @@
 require_relative "../../lib/api/user"
-class UserManager
-  def initialize(token)
-    @token = token
-  end
 
-  def search_user(email)
-    response = user_call_search(email)
-    search_array = JSON.parse(response.body)
+module API
+  class UserManager
+    def initialize(token)
+      @token = token
+    end
 
-    return nil if search_array.empty?
+    def search_user(email)
+      response = user_call_search(email)
+      search_array = JSON.parse(response.body)
 
-    puts "User created: #{search_array}"
-    User.new(search_array.first)
-  end
+      return nil if search_array.empty?
 
-  def deactivate_user_api(user_id)
-    deactivate_url = "#{ENV['APP_URL']}api/v2/users/#{user_id}/deactivate"
-    HTTP.headers(accept: "application/json", authorization: "Bearer #{@token}").put(deactivate_url)
-  end
+      puts "User created: #{search_array}"
+      User.new(search_array.first)
+    end
 
-  def get_user_id(email)
-    search_array = JSON.parse(user_call_search(email).body)
-    return nil if search_array.empty?
+    def deactivate_user_api(user_id)
+      deactivate_url = "#{ENV['APP_URL']}api/v2/users/#{user_id}/deactivate"
+      HTTP.headers(accept: "application/json", authorization: "Bearer #{@token}").put(deactivate_url)
+    end
 
-    search_array.first['id']
-  end
+    private
 
-  private
-
-  def user_call_search(email)
-    search_url = "#{ENV['APP_URL']}api/v2/user_brokers?&query=#{email}"
-    HTTP.headers(accept: "application/json", authorization: "Bearer #{@token}").get(search_url)
+    def user_call_search(email)
+      search_url = "#{ENV['APP_URL']}api/v2/user_brokers?&query=#{email}"
+      HTTP.headers(accept: "application/json", authorization: "Bearer #{@token}").get(search_url)
+    end
   end
 end
+

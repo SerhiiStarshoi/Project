@@ -1,15 +1,16 @@
 Before("@admin_auth") do
   admin = { "email" => ENV["ADMIN_EMAIL"], "password" => ENV["PASSWORD"] }
-  authorization = Authorization.new
-  @device_manager = Devices::DeviceManager.new(authorization.receive_token(admin))
+  authorization = API::Authorization.new
+  token = authorization.receive_token(admin)
+  @device_manager = API::Devices::DeviceManager.new(token)
 end
 
 Before("@broker_auth") do
   broker = { "email" => ENV["BROKER_EMAIL"], "password" => ENV["PASSWORD"] }
-  authorization = Authorization.new
+  authorization = API::Authorization.new
   token = authorization.receive_token(broker)
-  @location_manager = Locations::LocationManager.new(token)
-  @user_manager = UserManager.new(token)
+  @location_manager = API::Locations::LocationManager.new(token)
+  @user_manager = API::UserManager.new(token)
 end
 
  Before do
@@ -19,7 +20,7 @@ end
 
 After do
   if @searched_user
-    user_id = @user_manager.get_user_id(@searched_user.email)
+    user_id = @user_manager.search_user(@searched_user.email).id
     @user_manager.deactivate_user_api(user_id)
   end
 end

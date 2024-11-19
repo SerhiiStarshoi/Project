@@ -1,6 +1,8 @@
 require_relative "page"
 class LoginPage < Page
 
+  PATH = ""
+
   def fill_in_email
     email.send_keys(ENV['EMAIL'])
     sleep 2
@@ -8,12 +10,6 @@ class LoginPage < Page
 
   def fill_in_password
     password.send_keys(ENV['PASSWORD'])
-  end
-
-  def click(button_name)
-    sleep 3
-    button(button_name).click
-    sleep 2
   end
 
   private

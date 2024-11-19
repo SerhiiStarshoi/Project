@@ -7,11 +7,6 @@ class MyTeamPage < Page
     @wait = Selenium::WebDriver::Wait.new(timeout: 5)
   end
 
-  def click(button_name)
-    sleep 3
-    button(button_name).click
-  end
-
   def fill_in(data, driver)
     first_name_input.send_keys(data[:first_name])
     sleep(1)
@@ -30,7 +25,8 @@ class MyTeamPage < Page
     save_user_button.click
   end
 
-  def search_ui
+  def search_ui(email)
+    @driver.get "#{ENV['APP_URL']}app/profile/team/brokers?query=#{email}"
     first_row = @wait.until { @driver.find_element(:xpath, "(//div[@role='row'])[1]") }
 
     name_parts = first_row.text.split(' ')
@@ -47,7 +43,7 @@ class MyTeamPage < Page
       "role" => role
     }
 
-    User.new(data)
+    API::User.new(data)
   end
 
   def deactivate_user_ui

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
-
-module Devices
-  class Builder
+module API
+  module Devices
+    class Builder
+    end
   end
 end

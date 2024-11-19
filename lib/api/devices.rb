@@ -1,5 +1,8 @@
-require_relative "api/devices/ce"
-require_relative "api/devices/device_manager"
+require_relative "../api/devices/device"
+require_relative "../api/devices/device_manager"
+require_relative "../api//manager"
 
-module Devices
+module API
+  module Devices
+  end
 end

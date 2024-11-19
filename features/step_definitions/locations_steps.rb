@@ -55,7 +55,6 @@ end
 
 Then(/^I check location is deactivated:$/) do |table|
   data = table.symbolic_hashes.first
-  #search by location title or smth else, activated?
-  activated = @location_manager.search_if_activated(@location.title)
-  expect(activated.to_s).to eq(data[:activated].to_s)
+  searched_location = @location_manager.search(@location.title)
+  expect(searched_location.activated.to_s).to eq(data[:activated].to_s)
 end
