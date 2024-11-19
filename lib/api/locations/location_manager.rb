@@ -4,10 +4,6 @@ module API
 
       LOCATION_URL = "#{ENV['LM_LINK']}api/v1/locations"
 
-      def initialize(token)
-        @token = token
-      end
-
       def create(params)
         response = location_call_create(params)
         expect(response.status).to eq(200)
@@ -57,7 +53,7 @@ module API
       private
 
       def location_call_get(location)
-        location_check_url = "https://location-management.az-dev.over-haul.com/api/v1/locations/#{location.id}" #constant use like in location_call_create
+        location_check_url = "#{LOCATION_URL}/#{location.id}" #constant use like in location_call_create
         http.get(location_check_url)
       end
 
@@ -82,7 +78,7 @@ module API
       end
 
       def location_call_search(location_title)
-        search_url = "https://location-management.az-dev.over-haul.com/api/v1/locations?page=1&per_page=10&sort=&query=#{location_title}&filters=%7B%22portal_ids%22:[],%22types%22:[],%22statuses%22:[%22active%22,%22inactive%22]%7D"
+        search_url = "#{LOCATION_URL}?page=1&per_page=10&sort=&query=#{location_title}&filters=%7B%22portal_ids%22:[],%22types%22:[],%22statuses%22:[%22active%22,%22inactive%22]%7D"
         http.get(search_url)
       end
 

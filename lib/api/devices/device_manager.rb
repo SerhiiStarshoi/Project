@@ -4,10 +4,6 @@ module API
   module Devices
     class DeviceManager < API::Manager
 
-      def initialize(token)
-        @token = token
-      end
-
       DEVICE_URL = "#{ENV['API_V3']}device_management/devices"
 
       def create(params)

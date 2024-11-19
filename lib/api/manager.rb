@@ -3,6 +3,10 @@ module API
     include RSpec::Matchers
 
     attr_reader :token
+
+    def initialize(token)
+      @token = token
+    end
     def http
       HTTP.headers(accept: "application/json", authorization: "Bearer #{token}")
     end
