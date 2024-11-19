@@ -20,7 +20,7 @@ end
 
 After do
   if @searched_user
-    user_id = @user_manager.search_user(@searched_user.email).id
+    user_id = @user_manager.search_user_api(@searched_user.email).id
     @user_manager.deactivate_user_api(user_id)
   end
 end

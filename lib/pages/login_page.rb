@@ -1,7 +1,6 @@
 require_relative "page"
 class LoginPage < Page
-
-  PATH = ""
+  PATH = "app/sign-in"
 
   def fill_in_email
     email.send_keys(ENV['EMAIL'])
@@ -13,12 +12,6 @@ class LoginPage < Page
   end
 
   private
-
-  attr_reader :driver
-
-  def button(button_name)
-    @wait.until { @driver.find_element(xpath: "//*[text()='#{button_name}']") }
-  end
 
   def email
     @wait.until { @driver.find_element(id: "email") }

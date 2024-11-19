@@ -2,10 +2,6 @@ require_relative "page"
 
 class MyTeamPage < Page
   PATH = "app/profile/team"
-  def initialize(driver)
-    @driver = driver
-    @wait = Selenium::WebDriver::Wait.new(timeout: 5)
-  end
 
   def fill_in(data, driver)
     first_name_input.send_keys(data[:first_name])
@@ -26,8 +22,9 @@ class MyTeamPage < Page
   end
 
   def search_ui(email)
-    @driver.get "#{ENV['APP_URL']}app/profile/team/brokers?query=#{email}"
-    first_row = @wait.until { @driver.find_element(:xpath, "(//div[@role='row'])[1]") }
+    @driver.get "#{ENV['APP_URL']}#{PATH}/brokers?query=#{email}"
+    #first_row = @wait.until { @driver.find_element(:xpath, "(//div[@role='row'])[1]") }
+    first_row = @wait.until { @driver.find_elements(:xpath, "//div[@role='row']").first }
 
     name_parts = first_row.text.split(' ')
     first_name = name_parts[0]
@@ -36,14 +33,16 @@ class MyTeamPage < Page
     role = name_parts[3..-1].join(' ').strip.chomp(' -')
 
     data = {
-      "id" => nil,
-      "first_name" => first_name,
-      "last_name" => last_name,
-      "email" => email,
-      "role" => role
+      id: nil,
+      first_name: first_name,
+      last_name: last_name,
+      email: email,
+      role: role
     }
 
-    API::User.new(data)
+    user = API::User.new(data)
+    puts user.inspect
+    user
   end
 
   def deactivate_user_ui
@@ -61,19 +60,19 @@ class MyTeamPage < Page
   private
 
   def first_name_input
-    @wait.until { driver.find_element(xpath: '//*[@data-test-id="first_name-input"]') }
+    @wait.until { @driver.find_element(xpath: '//*[@data-test-id="first_name-input"]') }
   end
 
   def last_name_input
-    @wait.until { driver.find_element(css: '[data-test-id="last_name-input"]') }
+    @wait.until { @driver.find_element(css: '[data-test-id="last_name-input"]') }
   end
 
   def email_input
-    @wait.until { driver.find_element(css: '[data-test-id="email-input"]') }
+    @wait.until { @driver.find_element(css: '[data-test-id="email-input"]') }
   end
 
   def role_input
-    @wait.until { driver.find_element(css: 'input[role="combobox"][name="role"]') }
+    @wait.until { @driver.find_element(css: 'input[role="combobox"][name="role"]') }
   end
 
   def watch_officer_option(driver)
@@ -85,16 +84,11 @@ class MyTeamPage < Page
   end
 
   def deactivate_user_button
-    @wait.until { @driver.find_element(css: 'button[data-test-id="deactivate-broker-user-btn"]') }
+    @wait.until { @driver.find_element(css: 'button[data-test-id="deactivate-broker-users-btn"]') }
   end
 
   def deactivate_user_button_confirm
     @wait.until { @driver.find_element(css: 'button[data-test-id="modal_success_button"]')  }
-  end
-
-  def button(button_name)
-    #@wait.until { @driver.find_element(css: 'button[data-test-id="add-broker-user-btn"]') }
-    @wait.until { @driver.find_element(xpath: "//button[text()='#{button_name}']") }
   end
 
   def save_user_button
@@ -102,8 +96,6 @@ class MyTeamPage < Page
   end
 
   def user_email
-    @wait.until { @driver.find_element(css: 'button[data-test-id="deactivate-broker-user-btn"]') }
+    @wait.until { @driver.find_element(css: 'button[data-test-id="deactivate-broker-users-btn"]') }
   end
-
-  attr_reader :driver
 end

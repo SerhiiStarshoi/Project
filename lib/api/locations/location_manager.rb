@@ -15,7 +15,6 @@ module API
         response = location_call_update(location, params)
         expect(response.status).to eq(200)
         data = JSON.parse(response.body)
-        #puts "Location updated: #{data}"
         Location.new(data)
       end
 
@@ -28,7 +27,7 @@ module API
       def get_location(location)
         response = location_call_get(location)
         expect(response.status).to eq(200)
-        Location.new(JSON.parse(response.body))
+       Location.new(JSON.parse(response.body))
       end
 
       def search(location_title)
@@ -47,13 +46,13 @@ module API
           "activated" => data[0]["activated"]
         }
 
-        API::Locations::Location.new(location_data)
+        Location.new(location_data)
       end
 
       private
 
       def location_call_get(location)
-        location_check_url = "#{LOCATION_URL}/#{location.id}" #constant use like in location_call_create
+        location_check_url = "#{LOCATION_URL}/#{location.id}"
         http.get(location_check_url)
       end
 

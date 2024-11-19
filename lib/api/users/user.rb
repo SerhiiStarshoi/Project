@@ -3,11 +3,11 @@ module API
     attr_reader :id, :first_name, :last_name, :email, :role
 
     def initialize(data)
-      @id = data["id"]
-      @first_name = data["first_name"]
-      @last_name = data["last_name"]
-      @email = data["email"]
-      @role  = data["role"]
+      @id = data[:id]
+      @first_name = data[:first_name]
+      @last_name = data[:last_name]
+      @email = data[:email]
+      @role  = data[:role]
     end
 
     def attrs

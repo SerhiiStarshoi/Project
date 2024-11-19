@@ -3,21 +3,20 @@ require_relative "../manager"
 module API
   module Devices
     class DeviceManager < API::Manager
-
       DEVICE_URL = "#{ENV['API_V3']}device_management/devices"
 
       def create(params)
         response = device_call_create(params)
         expect(response.status).to eq(200)
         data = JSON.parse(response.body)
-        API::Devices::Device.new(data)
+        Device.new(data)
       end
 
       def update(device, params)
         response = device_call_update(device, params)
         expect(response.status).to eq(200)
         data = JSON.parse(response.body)
-        API::Devices::Device.new(data)
+        Device.new(data)
       end
 
       def deactivate(device)
@@ -42,7 +41,7 @@ module API
           "device_status" => data[0]["stage"],
         }
 
-        API::Devices::Device.new(device_data)
+        Device.new(device_data)
       end
 
       private

@@ -28,7 +28,8 @@ Feature: UI Test
     And I search for user
     | Email |
     | 4322143@gmail.com |
-    Then I check user is created:
+    #Then I check there is only one user in the list
+    And I check user is created:
       | First Name | Last Name | Email                | Role          |
       | Serhii     | Starshoi  | 4322143@gmail.com | Watch Officer |
 
@@ -47,20 +48,10 @@ Feature: UI Test
     And I deactivate user
     And I check user is deactivated
 
-
-  #1. всі менеджери мають виглядати однаково + переглянути чи немає дублікованих методів
-  # (методи які є однакові в локейшен і юзер менеджер і зроби батьківський клас з наслідуваннями) X
-  #2. search_ui все таки моє шукати по мейлу і розбити на менші якщо 20+ рядків буде X
-  #3. get_user_id(email) замінмити на існуючий клас де ми ініціалізуємо вже новий обєкт X
-  #4. модуль для юзерів і для пейджз і для авторизацій теж додати X
-  #5. click який у 2ох пейджах перенести в -> Page X
-  #6. модуль апі який буде рікваєр рілейтив все що там лежить X
-  #7. def search_if_activated(location_title) in Locations замінити на метод серч
-  # (буде вертати юзера і буду вже брати поле актівейтед) X
-
-
-
-
-  # @driver.find_element(id: "email") забрати якщо воно буде працювати без нього X
-  #8. class MyTeamPage глянути чи все можна перенести в прайвит + всі решта класів переглянути X
-  #10 .   Then I check user is created: зробити щоб падало якщо ми не маємо Phone X
+  #1. user_manager -> user folder X
+  #2. def search_ui(email) елементи мають бути в окремих методах + переглянути решту
+  #3. Зробити юайний клас UserListItem який відображатиме один рядок в таблиці результатів пошуку юзерів і використатти як інстанс в методі def search_ui(email)
+  #4. Then I check there is only one user in the list використовуючи UserListItem
+  #5. UserManager < Manager X
+  #6. def watch_officer_option(driver) замість драйваер має передаватись тайтл
+  #7. @driver driver? X

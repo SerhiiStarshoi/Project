@@ -1,4 +1,3 @@
-
 module API
   class Authorization
     include RSpec::Matchers

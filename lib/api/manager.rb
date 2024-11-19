@@ -7,6 +7,9 @@ module API
     def initialize(token)
       @token = token
     end
+
+    private
+
     def http
       HTTP.headers(accept: "application/json", authorization: "Bearer #{token}")
     end

@@ -1,12 +1,9 @@
-require_relative "../../lib/api/user"
+require_relative "user"
 
 module API
-  class UserManager
-    def initialize(token)
-      @token = token
-    end
+  class UserManager < Manager
 
-    def search_user(email)
+    def search_user_api(email)
       response = user_call_search(email)
       search_array = JSON.parse(response.body)
 
