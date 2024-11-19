@@ -23,26 +23,21 @@ class MyTeamPage < Page
 
   def search_ui(email)
     @driver.get "#{ENV['APP_URL']}#{PATH}/brokers?query=#{email}"
-    #first_row = @wait.until { @driver.find_element(:xpath, "(//div[@role='row'])[1]") }
-    first_row = @wait.until { @driver.find_elements(:xpath, "//div[@role='row']").first }
-
     name_parts = first_row.text.split(' ')
-    first_name = name_parts[0]
-    last_name = name_parts[1]
-    email = name_parts[2]
-    role = name_parts[3..-1].join(' ').strip.chomp(' -')
 
     data = {
       id: nil,
-      first_name: first_name,
-      last_name: last_name,
-      email: email,
-      role: role
+      first_name: name_parts[0],
+      last_name: name_parts[1],
+      email: name_parts[2],
+      role: name_parts[3..-1].join(' ').strip.chomp(' -')
     }
+    API::User.new(data)
+  end
 
-    user = API::User.new(data)
-    puts user.inspect
-    user
+  def first_row
+    #@wait.until { @driver.find_element(:xpath, "(//div[@role='row'])[1]") }
+    @wait.until { @driver.find_elements(:xpath, "//div[@role='row']").first }
   end
 
   def deactivate_user_ui

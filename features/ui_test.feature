@@ -49,7 +49,7 @@ Feature: UI Test
     And I check user is deactivated
 
   #1. user_manager -> user folder X
-  #2. def search_ui(email) елементи мають бути в окремих методах + переглянути решту
+  #2. def search_ui(email) елементи мають бути в окремих методах + переглянути решту X
   #3. Зробити юайний клас UserListItem який відображатиме один рядок в таблиці результатів пошуку юзерів і використатти як інстанс в методі def search_ui(email)
   #4. Then I check there is only one user in the list використовуючи UserListItem
   #5. UserManager < Manager X
