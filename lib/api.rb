@@ -11,6 +11,7 @@ require_relative "api/locations/location"
 require_relative "api/locations/location_manager"
 require_relative "api/manager"
 require_relative "api/users/user"
+require_relative "api/users/_list_item"
 require_relative "api/users/user_manager"
 
 module Api

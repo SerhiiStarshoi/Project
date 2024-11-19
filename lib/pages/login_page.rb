@@ -1,28 +1,14 @@
-require_relative "page"
 class LoginPage < Page
-  PATH = "app/sign-in"
+  path "/"
+  validate :title, /Overhaul\z/
 
-  def fill_in_email
-    email.send_keys(ENV['EMAIL'])
-    sleep 2
-  end
+  element :user_email_input, :css, "#email"
+  element :password_input, :css, "#password"
+  element :submit_button, :css, "[data-test-id='sign-in-btn']"
 
-  def fill_in_password
-    password.send_keys(ENV['PASSWORD'])
-  end
-
-  private
-
-  def email
-    @wait.until { @driver.find_element(id: "email") }
-  end
-
-  def password
-    @wait.until { @driver.find_element(id: "password") }
-  end
-
-  def login_button
-    sleep(2)
-    @wait.until { @driver.find_element(css: 'button[data-test-id="sign-in-btn"]') }
+  def login(user:, pass:)
+    user_email_input_element.set(user)
+    password_input_element.set(pass)
+    submit_button_element.click
   end
 end

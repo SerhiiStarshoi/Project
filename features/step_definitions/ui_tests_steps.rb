@@ -1,91 +1,78 @@
 When(/^I open url$/) do
-  @driver.get "#{ENV['APP_URL']}"
-  @driver.current_url
+  visit("/")
 end
 
 Then(/^I check url link:$/) do |table|
   data = table.symbolic_hashes.first
-  sleep(2)
-  expect(@driver.current_url).to eq(data[:url])
+  expect(page.current_url).to eq(data[:url])
+end
+
+And(/^I deactivate user$/) do
+  MyTeamPage.given.deactivate_user_ui
 end
 
 Given(/^I login as Broker user$/) do
-  step("I open Login page")
-  step("I enter user email")
-  step("I enter user password")
-  step('I click "Sign in" button at "Login" page')
+  LoginPage.open
+  LoginPage.given.login(user: "watchofficerssportal@gmail.com", pass: "somepass")
+  wait_for_ajax
+end
+
+When(/^I open My Team page$/) do
+  MyTeamPage.open
 end
 
 And(/^I click "([^"]*)" button at "([^"]*)" page$/) do |button_name, page_name|
   case page_name
   when "My Team"
-    @my_team_page.click(button_name)
-    sleep(3)
+    puts "button_name = #{button_name}"
+    MyTeamPage.given.click(button_name)
   when "Login"
-    @login_page.click(button_name)
-    sleep(3)
+    #@login_page.click(button_name)
+    LoginPage.given.click(button_name)
+  when "My Network"
+    MyNetworkPage.given.click(button_name)
+  when "Assets"
+    MyNetworkPage.given.click(button_name)
   else
     raise "Unknown page: #{page_name}"
   end
 end
 
-Then(/^I check user is created:$/) do |table|
-  table.hashes.first.each do |key, value|
+When(/^I search for user$/) do |table|
+  data = table.symbolic_hashes.first
+  MyTeamPage.open(query_params: { query: data[:query] })
+end
+
+Then(/^I check there is only one user in the list$/) do
+
+end
+
+  Then(/^I check user is created:$/) do |table|
+    actual_user_data = table.hashes.first
+
+    user = MyTeamPage.given.user_by_name(actual_user_data["Name"])
+
     aggregate_failures do
-      case key
-      when "First Name"
-        expect(@searched_user.first_name). to eq(value)
-      when "Last Name"
-        expect(@searched_user.last_name). to eq(value)
-      when "Email"
-        expect(@searched_user.email). to eq(value)
-      when "Role"
-        expect(@searched_user.role). to eq(value)
-      else
-        raise "Unexpected key: #{key}"
+      actual_user_data.each do |key, value|
+        case key
+        when "Name"
+          expect(user.name).to eq(value)
+        when "Email"
+          expect(user.email).to eq(value)
+        when "Role"
+          expect(user.role).to eq(value)
+        else
+          raise "Unexpected key: '#{key}' with value '#{value}'"
+        end
       end
     end
   end
-end
-
-Given(/^I open Login page$/) do
-  @login_page = LoginPage.new(@driver)
-  @login_page.open
-end
-
-When(/^I enter user email$/) do
-  @login_page.fill_in_email
-end
-
-When(/^I enter user password$/) do
-  @login_page.fill_in_password
-end
 
 Then(/^I check Command Center page is opened$/) do
-  expect(CommandCenterPage.new(@driver).opened?).to be true
+  expect(CommandCenterPage.given.opened?).to be true
 end
 
-When(/^I open My Team page$/) do
-  @my_team_page = MyTeamPage.new(@driver)
-  @my_team_page.open
-end
-
-When(/^I fill in data:$/) do |table|
-  @my_team_page.fill_in(table.symbolic_hashes.first, @driver)
-end
-
-When(/^I search for user$/) do |table|
+And(/^I check user is deactivated$/) do |table|
   data = table.symbolic_hashes.first
-  @searched_user = @my_team_page.search_ui(data[:email])
-end
-
-And(/^I deactivate user$/) do
-  @driver.get "#{ENV['APP_URL']}app/profile/team/brokers?query=#{@searched_user.email}"
-
-  sleep(2)
-  @my_team_page.deactivate_user_ui
-end
-
-And(/^I check user is deactivated$/) do
-  expect(@user_manager.search_user(@searched_user.email)).to be nil
+  expect(@user_manager.search_user_api(data[:email])).to be nil
 end

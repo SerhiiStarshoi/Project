@@ -5,15 +5,12 @@ Feature: UI Test
   Scenario: Check that unauthorized user is redirected to login url
     Given I open url
     Then I check url link:
-      | url                                      |
-      | https://qa-app.over-haul.com/app/sign-in |
+      | url                           |
+      | https://qa-app.over-haul.com/ |
 
   @user_can_login
   Scenario: Check user is able to login
-    Given I open Login page
-    When I enter user email
-    And I enter user password
-    And I click "Sign in" button at "Login" page
+    Given I login as Broker user
     Then I check Command Center page is opened
 
   @create_watch_officer
@@ -23,15 +20,13 @@ Feature: UI Test
     And I click "Add user" button at "My Team" page
     And I fill in data:
       | First Name | Last Name | Email                | Role          |
-      | Serhii     | Starshoi  | 4322143@gmail.com | Watch Officer |
-    And I click "Save" button at "My Team" page
+      | Serhii     | Starshoi  | 45248252@gmail.com | Watch Officer |
     And I search for user
-    | Email |
-    | 4322143@gmail.com |
-    #Then I check there is only one user in the list
+      | query                |
+      | 45248252@gmail.com |
     And I check user is created:
-      | First Name | Last Name | Email                | Role          |
-      | Serhii     | Starshoi  | 4322143@gmail.com | Watch Officer |
+      | Name            | Email                | Role          |
+      | Serhii Starshoi | 45248252@gmail.com | Watch Officer |
 
   @deactivate_watch_officer
   Scenario: Deactivate created Watch Officer user
@@ -39,19 +34,23 @@ Feature: UI Test
     When I open My Team page
     And I click "Add user" button at "My Team" page
     And I fill in data:
-      | First Name | Last Name | Email                     | Role          |
-      | Serhii     | Starshoi  | 4322143@gmail.com | Watch Officer |
+      | First Name | Last Name | Email               | Role          |
+      | Serhii     | Starshoi  | 932482932@gmail.com | Watch Officer |
     And I click "Save" button at "My Team" page
     And I search for user
-    |  Email  |
-    | 4322143@gmail.com |
+      | query               |
+      | 932482932@gmail.com |
     And I deactivate user
     And I check user is deactivated
+      | Email               |
+      | 932482932@gmail.com |
 
-  #1. user_manager -> user folder X
-  #2. def search_ui(email) елементи мають бути в окремих методах + переглянути решту
-  #3. Зробити юайний клас UserListItem який відображатиме один рядок в таблиці результатів пошуку юзерів і використатти як інстанс в методі def search_ui(email)
-  #4. Then I check there is only one user in the list використовуючи UserListItem
-  #5. UserManager < Manager X
-  #6. def watch_officer_option(driver) замість драйваер має передаватись тайтл
-  #7. @driver driver? X
+  #. класи + наслідування в рубі книжка прочитати
+
+
+  #1. CMD S щоб заберало пробіли лишні
+  #2. double quots
+  #3. name args підсказки забрати
+  #4. зробити рандом на емейл (записувати таблицю в інстанс зміннм (вони доступні між сетпами) хеш має бути,
+  # і у всіх наступних степах підтягую
+  #5. api створити асет, а юайно відкрити на ам і перевірити чи він Stationary

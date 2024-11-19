@@ -1,0 +1,15 @@
+app_base_auth_login:
+app_base_auth_pass:
+app_host: "qa-app.over-haul.com"
+app_protocol: "https"
+base_url: "https://qa-app.over-haul.com"
+debug_mode: true
+driver: selenium
+hide_datetime_from_log: false
+idle_timeout: 10
+maximized_window: false
+page_load_idle_timeout: 30
+page_load_timeout: 60
+screenshots: false
+selenium_browser: chrome
+timeout: 30

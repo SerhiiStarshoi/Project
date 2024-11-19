@@ -1,14 +1,14 @@
 require_relative "page"
 
 class CommandCenterPage < Page
-  def initialize(driver)
-    @driver = driver
-  end
+  path "/"
+  validate :title, /Dashboard\z/
 
   def opened?
-    page_url = "#{ENV['APP_URL']}dashboard/command-center"
-    if page_url == @driver.current_url
+    command_center_url = "#{ENV['APP_URL']}/dashboard/command-center"
+    if command_center_url.eql? current_url
       true
+      else false
     end
   end
 end

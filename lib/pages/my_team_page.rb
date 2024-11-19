@@ -1,101 +1,25 @@
 require_relative "page"
 
 class MyTeamPage < Page
-  PATH = "app/profile/team"
+  path "/app/profile/team/brokers{?query_params*}"
+  validate :title, /Overhaul App\z/
 
-  def fill_in(data, driver)
-    first_name_input.send_keys(data[:first_name])
-    sleep(1)
-    last_name_input.send_keys(data[:last_name])
-    sleep(1)
-    email_input.send_keys(data[:email])
-    sleep(1)
+  section :user_list_item
+  section :user_add
 
-    role_input.click
-    sleep(1)
-    watch_officer_option(driver).click
-  end
+  element :add_user, :css, 'button[data-test-id="add-broker-user-btn"]'
 
-  def save_user
-    sleep 3
-    save_user_button.click
-  end
+  element :deactivate_user_button, :css, '[data-test-id="deactivate-broker-user-btn"]'
+  element :deactivate_user_button_confirm, :css, '[data-test-id="modal_success_button"]'
 
-  def search_ui(email)
-    @driver.get "#{ENV['APP_URL']}#{PATH}/brokers?query=#{email}"
-    #first_row = @wait.until { @driver.find_element(:xpath, "(//div[@role='row'])[1]") }
-    first_row = @wait.until { @driver.find_elements(:xpath, "//div[@role='row']").first }
+  element :save, :css, "button[data-test-id='modal_success_button']"
 
-    name_parts = first_row.text.split(' ')
-    first_name = name_parts[0]
-    last_name = name_parts[1]
-    email = name_parts[2]
-    role = name_parts[3..-1].join(' ').strip.chomp(' -')
-
-    data = {
-      id: nil,
-      first_name: first_name,
-      last_name: last_name,
-      email: email,
-      role: role
-    }
-
-    user = API::User.new(data)
-    puts user.inspect
-    user
+  def user_by_name(name)
+    user_list_item_sections.find { |user| user.name == name }
   end
 
   def deactivate_user_ui
-    @wait.until { deactivate_user_button.displayed? && deactivate_user_button.enabled? }
-    sleep(1)
-
-    deactivate_user_button.click
-    sleep(1)
-
-    @wait.until { deactivate_user_button_confirm.displayed? && deactivate_user_button_confirm.enabled? }
-    deactivate_user_button_confirm.click
-    sleep(1)
-  end
-
-  private
-
-  def first_name_input
-    @wait.until { @driver.find_element(xpath: '//*[@data-test-id="first_name-input"]') }
-  end
-
-  def last_name_input
-    @wait.until { @driver.find_element(css: '[data-test-id="last_name-input"]') }
-  end
-
-  def email_input
-    @wait.until { @driver.find_element(css: '[data-test-id="email-input"]') }
-  end
-
-  def role_input
-    @wait.until { @driver.find_element(css: 'input[role="combobox"][name="role"]') }
-  end
-
-  def watch_officer_option(driver)
-    # role_options = @wait.until { driver.find_elements(css: "[role='option']") }
-    # role_options.find { |option| option.text == "Watch Officer" }
-
-    title = "Watch Officer"
-    @wait.until { driver.find_element(xpath: "//*[@data-test-id='option-item-label' and text()='#{title}']") }
-  end
-
-  def deactivate_user_button
-    @wait.until { @driver.find_element(css: 'button[data-test-id="deactivate-broker-users-btn"]') }
-  end
-
-  def deactivate_user_button_confirm
-    @wait.until { @driver.find_element(css: 'button[data-test-id="modal_success_button"]')  }
-  end
-
-  def save_user_button
-    @wait.until { @driver.find_element(css: 'button[data-test-id="modal_success_button"]') }
-  end
-
-  def user_email
-    @wait.until { @driver.find_element(css: 'button[data-test-id="deactivate-broker-users-btn"]') }
+    deactivate_user_button_element.click
+    deactivate_user_button_confirm_element.click
   end
 end

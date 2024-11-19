@@ -11,16 +11,12 @@ Before("@broker_auth") do
   token = authorization.receive_token(broker)
   @location_manager = API::Locations::LocationManager.new(token)
   @user_manager = API::UserManager.new(token)
+  @asset_number = SecureRandom.alphanumeric(8) #в окремий хук який лише на асет відповідає
+  @asset_manager = API::Assets::AssetManager.new(token)
 end
 
- Before do
-   @driver = Selenium::WebDriver.for :chrome
-   @wait = Selenium::WebDriver::Wait.new(timeout: 3)
- end
-
-After do
-  if @searched_user
-    user_id = @user_manager.search_user_api(@searched_user.email).id
-    @user_manager.deactivate_user_api(user_id)
+After("@asset") do
+  if !@asset_number.nil?
+    @asset_manager.deactivate(@asset.id)
   end
 end
