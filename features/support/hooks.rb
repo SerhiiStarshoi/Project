@@ -1,3 +1,12 @@
+Before("@asset") do
+  @asset_number = SecureRandom.alphanumeric(8)
+end
+
+Before("@create_users") do
+  @user_email = SecureRandom.alphanumeric(8).downcase + "@gmail.com"
+  puts "User will be created with such email: #{@user_email}"
+end
+
 Before("@admin_auth") do
   admin = { "email" => ENV["ADMIN_EMAIL"], "password" => ENV["PASSWORD"] }
   authorization = API::Authorization.new
@@ -11,7 +20,6 @@ Before("@broker_auth") do
   token = authorization.receive_token(broker)
   @location_manager = API::Locations::LocationManager.new(token)
   @user_manager = API::UserManager.new(token)
-  @asset_number = SecureRandom.alphanumeric(8) #в окремий хук який лише на асет відповідає
   @asset_manager = API::Assets::AssetManager.new(token)
 end
 

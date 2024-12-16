@@ -5,7 +5,7 @@ end
 And(/^I fill in data:$/) do | table|
   case current_url
   when /\/team\/brokers/
-    MyTeamPage.given.user_add_section.fill_in_data(table.hashes.first)
+    MyTeamPage.given.user_add_section.fill_in_data(table.hashes.first, @user_email)
   when /\/assets\/create/
     MyNetworkPage.given.fill_in_data(table.hashes.first, @asset_number)
   end

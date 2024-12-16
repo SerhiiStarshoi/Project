@@ -8,10 +8,10 @@ class UserAddSection < Section
   element :save, :css,"button[data-test-id='modal_success_button']"
   element :dropdown_item, :xpath, ->(name) { %(//li[descendant-or-self::*[text()="#{name}"]] | //*[(@role='menuitem' or @role='option') and contains(., "#{name}")]) }
 
-  def fill_in_data(data)
+  def fill_in_data(data, email)
     name_input_element.send_keys(data["First Name"])
     last_name_input_element.send_keys(data["Last Name"])
-    email_input_element.send_keys(data["Email"])
+    email_input_element.send_keys(email)
 
     role_input_element.click
     role_input_element.send_keys(data["Role"])

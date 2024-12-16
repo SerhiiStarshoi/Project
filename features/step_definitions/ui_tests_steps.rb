@@ -38,9 +38,8 @@ And(/^I click "([^"]*)" button at "([^"]*)" page$/) do |button_name, page_name|
   end
 end
 
-When(/^I search for user$/) do |table|
-  data = table.symbolic_hashes.first
-  MyTeamPage.open(query_params: { query: data[:query] })
+When(/^I search for user$/) do
+  MyTeamPage.open(query_params: { query: @user_email })
 end
 
 Then(/^I check there is only one user in the list$/) do
@@ -58,7 +57,7 @@ end
         when "Name"
           expect(user.name).to eq(value)
         when "Email"
-          expect(user.email).to eq(value)
+          expect(user.email).to eq(@user_email)
         when "Role"
           expect(user.role).to eq(value)
         else
@@ -72,7 +71,6 @@ Then(/^I check Command Center page is opened$/) do
   expect(CommandCenterPage.given.opened?).to be true
 end
 
-And(/^I check user is deactivated$/) do |table|
-  data = table.symbolic_hashes.first
-  expect(@user_manager.search_user_api(data[:email])).to be nil
+And(/^I check user is deactivated$/) do
+  expect(@user_manager.search_user_api(@user_email)).to be nil
 end
